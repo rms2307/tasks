@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, ImageBackground, StyleSheet } from 'react-native'
+import { View, Text, ImageBackground, StyleSheet, FlatList } from 'react-native'
 
 import comonStyles from '../commonStyles'
 import todayImage from '../../assets/imgs/today.jpg'
@@ -10,6 +10,21 @@ import 'moment/locale/pt-br'
 import Task from '../components/Task'
 
 export default class TaskList extends Component {
+
+    state = {
+        tasks: [{
+            id: Math.random(),
+            descricao: 'Comprar Livro',
+            estimateAt: new Date(),
+            doneAt: new Date()
+        }, {
+            id: Math.random(),
+            descricao: 'Ler Livro',
+            estimateAt: new Date(),
+            doneAt: null        
+        },]
+    }
+
     render() {
         const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
         return (
@@ -22,42 +37,9 @@ export default class TaskList extends Component {
                     </View>
                 </ImageBackground>
                 <View style={styles.taskList}>
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
-                    <Task descricao='Comprar Livro' estimateAt={new Date()}
-                    doneAt={new Date()} />
-                    <Task descricao='Ler Livro' estimateAt={new Date()}
-                    doneAt={null} />
+                    <FlatList data={this.state.tasks}
+                        keyExtractor={item => `${item.id}`}
+                        renderItem={({ item }) => <Task {...item} />} />
                 </View>
             </View>
         )
@@ -77,7 +59,7 @@ const styles = StyleSheet.create({
     titleBar: {
         flex: 1,
         justifyContent: 'flex-end',
-    }, 
+    },
     title: {
         fontFamily: comonStyles.fontFamily,
         color: comonStyles.colors.secondary,
