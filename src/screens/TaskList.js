@@ -21,8 +21,29 @@ export default class TaskList extends Component {
             id: Math.random(),
             descricao: 'Ler Livro',
             estimateAt: new Date(),
-            doneAt: null        
+            doneAt: null
+        }, {
+            id: Math.random(),
+            descricao: 'Comprar Livro',
+            estimateAt: new Date(),
+            doneAt: new Date()
+        }, {
+            id: Math.random(),
+            descricao: 'Ler Livro',
+            estimateAt: new Date(),
+            doneAt: null
         },]
+    }
+
+    toggleTask = taskId => {
+        const tasks = [...this.state.tasks]
+        tasks.forEach(task => {
+            if (task.id === taskId) {
+                task.doneAt = task.doneAt ? null : new Date()
+            }
+        })
+
+        this.setState({ tasks })
     }
 
     render() {
@@ -39,7 +60,8 @@ export default class TaskList extends Component {
                 <View style={styles.taskList}>
                     <FlatList data={this.state.tasks}
                         keyExtractor={item => `${item.id}`}
-                        renderItem={({ item }) => <Task {...item} />} />
+                        renderItem={({ item }) => <Task {...item}
+                            toggleTask={this.toggleTask} />} />
                 </View>
             </View>
         )
