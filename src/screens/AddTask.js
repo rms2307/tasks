@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {
+    Platform,
     Modal,
     View,
     StyleSheet,
@@ -10,14 +11,40 @@ import {
     TouchableOpacityBase
 } from 'react-native'
 
+import DateTimePicker from '@react-native-community/datetimepicker'
+import moment from 'moment'
+
 import commonStyles from '../commonStyles'
 
-const initialState = { desc: '' }
+const initialState = { desc: '', date: new Date(), showDatePicker: false }
 
 export default class AssTask extends Component {
 
     state = {
         ...initialState
+    }
+
+    getDatePicker = () => {
+        let datePicker = <DateTimePicker value={this.state.date}
+            onChange={(_, date) => this.setState({ date })} mode='date' />
+
+        const dateString = moment(this.state.date).format('ddd, D [de] MMM [de] YYYY')
+
+        if (Platform.OS === 'android') {
+            datePicker = (
+                <View>
+                    <TouchableOpacity
+                        onPress={() => this.setState({ showDatePicker: true })}>
+                        <Text style={styles.date}>
+                            {dateString}
+                        </Text>
+                    </TouchableOpacity>
+                    {this.state.showDatePicker && datePicker}
+                </View>
+            )
+        }
+
+        return datePicker
     }
 
     render() {
@@ -34,6 +61,7 @@ export default class AssTask extends Component {
                         placeholder='Nova Tarefa...'
                         value={this.state.desc}
                         onChangeText={desc => this.setState({ desc })} />
+                    {this.getDatePicker()}
                     <View style={styles.buttons}>
                         <TouchableOpacity onPress={this.props.onCancel}>
                             <Text style={styles.button}>Cancelar</Text>
@@ -90,5 +118,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 10,
+    },
+    date: {
+        fontFamily: commonStyles.fontFamily,
+        fontSize: 20,
+        marginLeft: 15
     }
 })
