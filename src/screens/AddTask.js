@@ -24,6 +24,16 @@ export default class AssTask extends Component {
         ...initialState
     }
 
+    save = () => {
+        const newTask = {
+            desc: this.state.desc,
+            date: this.state.date
+        }
+
+        this.props.onSave && this.props.onSave(newTask)
+        this.setState({ ...initialState })
+    }
+
     getDatePicker = () => {
         let datePicker = <DateTimePicker value={this.state.date}
             onChange={(_, date) => this.setState({ date })} mode='date' />
@@ -66,7 +76,7 @@ export default class AssTask extends Component {
                         <TouchableOpacity onPress={this.props.onCancel}>
                             <Text style={styles.button}>Cancelar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.save}>
                             <Text style={styles.button}>Salvar</Text>
                         </TouchableOpacity>
                     </View>
