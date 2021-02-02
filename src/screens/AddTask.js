@@ -31,11 +31,13 @@ export default class AssTask extends Component {
 
         this.props.onSave && this.props.onSave(newTask)
         this.setState({ ...initialState })
+        console.log('initialState =>', this.state)
     }
 
     getDatePicker = () => {
         let datePicker = <DateTimePicker value={this.state.date}
-            onChange={(_, date) => this.setState({ date })} mode='date' />
+            onChange={(_, date) => this.setState({ date, showDatePicker: false })}
+            mode='date' />
 
         const dateString = moment(this.state.date).format('ddd, D [de] MMM [de] YYYY')
 
@@ -52,7 +54,7 @@ export default class AssTask extends Component {
                 </View>
             )
         }
-
+        console.log('datePicker =>', this.state)
         return datePicker
     }
 
