@@ -54,7 +54,6 @@ export default class AssTask extends Component {
                 </View>
             )
         }
-        console.log('datePicker =>', this.state)
         return datePicker
     }
 
