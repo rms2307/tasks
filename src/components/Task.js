@@ -56,7 +56,7 @@ export default props => {
                 </TouchableWithoutFeedback>
                 <View>
                     <Text style={[styles.descricao, doneOrNotStyle]}>
-                        {props.descricao}
+                        {props.desc}
                     </Text>
                     <Text style={styles.date}>
                         {formattedDate + ''}

@@ -31,7 +31,6 @@ export default class AssTask extends Component {
 
         this.props.onSave && this.props.onSave(newTask)
         this.setState({ ...initialState })
-        console.log('initialState =>', this.state)
     }
 
     getDatePicker = () => {
