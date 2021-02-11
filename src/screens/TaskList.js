@@ -18,6 +18,9 @@ import 'moment/locale/pt-br'
 
 import comonStyles from '../commonStyles'
 import todayImage from '../../assets/imgs/today.jpg'
+import tomorrowImage from '../../assets/imgs/tomorrow.jpg'
+import weekImage from '../../assets/imgs/week.jpg'
+import monthImage from '../../assets/imgs/month.jpg'
 import { server, showError } from '../common'
 
 import Task from '../components/Task'
@@ -46,7 +49,9 @@ export default class TaskList extends Component {
 
     loadTasks = async () => {
         try {
-            const maxDate = moment().format('YYYY-MM-DD 23:59:59')
+            const maxDate = moment()
+                .add({ days: this.props.daysAhead })
+                .format('YYYY-MM-DD 23:59:59')
             const res = await axios.get(`${server}/tasks?date=${maxDate}`)
             this.setState({ tasks: res.data }, this.filterTasks)
         } catch (e) {
@@ -109,6 +114,24 @@ export default class TaskList extends Component {
         }
     }
 
+    getImage = () => {
+        switch (this.props.daysAhead) {
+            case 0: return todayImage
+            case 1: return tomorrowImage
+            case 7: return weekImage
+            default: return monthImage
+        }
+    }
+
+    getColor = () => {
+        switch (this.props.daysAhead) {
+            case 0: return comonStyles.colors.today
+            case 1: return comonStyles.colors.tomorrow
+            case 7: return comonStyles.colors.week
+            default: return comonStyles.colors.month
+        }
+    }
+
     render() {
         const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
         return (
@@ -116,16 +139,20 @@ export default class TaskList extends Component {
                 <AddTask isVisible={this.state.showAddTask}
                     onCancel={() => this.setState({ showAddTask: false })}
                     onSave={this.addTask} />
-                <ImageBackground source={todayImage}
+                <ImageBackground source={this.getImage()}
                     style={styles.background}>
                     <View style={styles.iconBar}>
+                        <TouchableOpacity onPress={() => this.props.navigation.openDrawer()}>
+                            <Icon name='bars'
+                                size={30} color={comonStyles.colors.secondary} />
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={this.toggleFilter}>
                             <Icon name={this.state.showDoneTasks ? 'eye' : 'eye-slash'}
                                 size={30} color={comonStyles.colors.secondary} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.titleBar}>
-                        <Text style={styles.title}>Hoje</Text>
+                        <Text style={styles.title}>{this.props.title}</Text>
                         <Text style={styles.subTitle}>{today}</Text>
                     </View>
                 </ImageBackground>
@@ -136,7 +163,7 @@ export default class TaskList extends Component {
                             onToggleTask={this.toggleTask}
                             onDelete={this.deleteTask} />} />
                 </View>
-                <TouchableOpacity style={styles.addButton}
+                <TouchableOpacity style={[styles.addButton, { backgroundColor: this.getColor() }]}
                     activeOpacity={0.7}
                     onPress={() => this.setState({ showAddTask: true })} >
                     <Icon name='plus' size={20}
@@ -178,7 +205,7 @@ const styles = StyleSheet.create({
     iconBar: {
         flexDirection: 'row',
         marginHorizontal: 20,
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         marginTop: Platform.OS === 'ios' ? 40 : 10
     },
     addButton: {
@@ -189,7 +216,6 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25,
-        backgroundColor: comonStyles.colors.today,
         justifyContent: 'center',
         alignItems: 'center'
     }
