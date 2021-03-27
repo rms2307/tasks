@@ -5,7 +5,6 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    Alert
 } from 'react-native'
 
 import axios from 'axios'
@@ -47,7 +46,7 @@ export default class Auth extends Component {
                 confirmPassword: this.state.confirmPassword,
             })
 
-            showSuccess('Usuário cadastro!')
+            showSuccess('Usuário cadastrado!')
             this.setState({ ...initialState })
         } catch (e) {
             showError(e)
